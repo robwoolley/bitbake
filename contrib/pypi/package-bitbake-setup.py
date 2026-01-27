@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+
+import argparse
+import logging
+import os
+import shutil
+from pathlib import Path
+
+def create_packaging_workspace(directory):
+    # Create the directory for packaging workspace
+    if len(directory or "") > 0:
+        workspace_dir = Path(directory)
+    else:
+        # This script is located in contrib/pypi/package-bitbake-setup.py
+        workspace_dir = Path(__file__).parents[2] / "packaging_workspace"
+
+    if not workspace_dir.exists():
+        logging.debug(f"Created packaging workspace at: {workspace_dir}")
+        workspace_dir.mkdir(exist_ok=True)
+    else:
+        logging.debug(f"Packaging workspace already exists at: {workspace_dir}")
+
+    # Copy packaging files to the workspace
+    files_to_copy = [
+        "contrib/pypi/pyproject.toml",
+        "contrib/pypi/README.md",
+        "contrib/pypi/LICENSE",
+        "contrib/pypi/noxfile.py",
+        "LICENSE.MIT",
+        "LICENSE.GPL-2.0-only"
+    ]
+
+    for file in files_to_copy:
+        src_path = Path(__file__).parents[2] / file
+        dest_path = workspace_dir / Path(file).name
+
+        if src_path.is_dir():
+            shutil.copytree(src_path, dest_path, dirs_exist_ok=True)
+            logging.debug(f"Copied directory: {src_path} to {dest_path}")
+        else:
+            shutil.copy2(src_path, dest_path)
+            logging.debug(f"Copied file: {src_path} to {dest_path}")
+
+
+    # Copy necessary modules to the workspace
+    modules_to_copy = [
+        "lib/bb",
+        "lib/bs4",
+        "lib/ply"
+    ]
+
+    for module in modules_to_copy:
+        src_path = Path(__file__).parents[2] / module
+        dest_path = workspace_dir / "src" / Path(module).name
+
+        if src_path.is_dir():
+            shutil.copytree(src_path, dest_path, dirs_exist_ok=True)
+            logging.debug(f"Copied module directory: {src_path} to {dest_path}")
+        else:
+            shutil.copy2(src_path, dest_path)
+            logging.debug(f"Copied module file: {src_path} to {dest_path}")
+
+    # Create bitbake_setup module
+    bitbake_setup_dir = Path(workspace_dir / "src" / "bitbake_setup")
+    bitbake_setup_dir.mkdir(exist_ok=True)
+    Path(bitbake_setup_dir / "__init__.py").touch()
+    shutil.copy2(Path(__file__).parents[2] / "bin" / "bitbake-setup", str(bitbake_setup_dir / "__main__.py"))
+
+    # Create codegen module
+    codegen_dir = Path(workspace_dir / "src" / "codegen")
+    codegen_dir.mkdir(exist_ok=True)
+    Path(codegen_dir / "__init__.py").touch()
+    shutil.copy2(Path(__file__).parents[2] / "lib" / "codegen.py", str(codegen_dir / "__main__.py"))
+
+    # Copy tests
+    tests_dir = Path(workspace_dir / "tests")
+    tests_dir.mkdir(exist_ok=True)
+    shutil.copytree(Path(__file__).parents[2] / "contrib" / "pypi" / "tests", str(tests_dir), dirs_exist_ok=True)
+
+
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+    parser = argparse.ArgumentParser(description='Package bitbake-setup for PyPI')
+    parser.add_argument('-v', '--verbose', action='store_true', help='increase output verbosity.')
+    parser.add_argument('-d', '--directory', type=str, help='specify the directory to create the packaging workspace in.')
+
+    args = parser.parse_args();
+
+    if args.verbose:
+        logging.getLogger().setLevel(logging.DEBUG)
+
+    create_packaging_workspace(args.directory);
