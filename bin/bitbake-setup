@@ -4,29 +4,28 @@
 # SPDX-License-Identifier: GPL-2.0-only
 #
 
+import argparse
+import configparser
+import copy
+import datetime
+import functools
+import glob
+import json
 import logging
 import os
-import sys
-import argparse
-import json
 import shutil
-import time
-import configparser
-import datetime
-import glob
-import subprocess
-import copy
-import textwrap
 import signal
-import functools
 import string
-
-bindir = os.path.abspath(os.path.dirname(__file__))
-sys.path[0:0] = [os.path.join(os.path.dirname(bindir), 'lib')]
+import subprocess
+import sys
+import textwrap
+import time
 
 import bb.msg
 import bb.process
 
+bindir = os.path.abspath(os.path.dirname(__file__))
+sys.path[0:0] = [os.path.join(os.path.dirname(bindir), 'lib')]
 logger = bb.msg.logger_create('bitbake-setup', sys.stdout)
 
 # These settings can only be set in the global context
