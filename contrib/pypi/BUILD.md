@@ -27,7 +27,7 @@ BB_SKIP_PYPI_TESTS=no bin/bitbake-selftest -v bb.tests.setup.PyPIPackagingTest
 To create the development sandbox run:
 ```bash
 contrib/pypi/package-bitbake-setup.py
-cd packaging-workshop
+cd packaging_workshop
 ```
 
 ### Testing
