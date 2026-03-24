@@ -8,24 +8,51 @@
 
 ## Automated testing
 
-The steps to lint, build, and test the bitbake-setup pypi packaging have been automated with the nox tool.  This tool automatically creates a Python virtual environment for you.
-
-To run the linters do:
+To lint the `bitbake-setup` pypi packaging, run the ruff tool.
 ```bash
-nox -s lint
+ruff check bin/bitbake-setup contrib/pypi
 ```
 
-To run the build do:
-```bash
-nox -s build
-```
+The steps to build, and test the `bitbake-setup` pypi packaging have been automated with the `bitbake-selftest` tool.  This tool automatically creates a Python virtual environment for you.
 
-To run the tests do:
+Run the bitbake-selftest
 ```bash
-nox -s tests
+BB_SKIP_PYPI_TESTS=no bin/bitbake-selftest -v bb.tests.setup.PyPIPackagingTest
 ```
 
 ## Manual Steps
+
+### Create the development sandbox
+
+To create the development sandbox run:
+```bash
+contrib/pypi/package-bitbake-setup.py
+cd packaging-workshop
+```
+
+### Testing
+
+Install the tests in the workspace:
+```bash
+python3 -m pip install -e '.[test]'
+```
+
+Run pytest in the workspace:
+```bash
+pytest tests
+```
+
+### Linting
+
+Install the linting tools in the workspace:
+```bash
+python3 -m pip install -e '.[lint]'
+```
+
+Run the linting tools in the workspace:
+```bash
+ruff check src/bitbake_setup
+```
 
 ### Building
 
@@ -41,17 +68,8 @@ python3 -m build
 
 This produces a wheel (.whl) file in the dist directory.  This may be installed using pip.
 
-### Testing
+# Installing
 
 ```bash
-python3 -m pip install -e '.[test]'
-pytest
-```
-
-### Linting
-
-```bash
-python3 -m pip install -e '.[lint]'
-
-ruff check src/bitbake_setup
+python3 -m pip install dist/bitbake_setup-0.0.0-py3-none-any.whl
 ```
