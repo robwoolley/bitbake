@@ -2,9 +2,9 @@
 
 import argparse
 import logging
-import os
 import shutil
 from pathlib import Path
+
 
 def create_packaging_workspace(directory):
     # Create the directory for packaging workspace
@@ -25,7 +25,6 @@ def create_packaging_workspace(directory):
         "contrib/pypi/pyproject.toml",
         "contrib/pypi/README.md",
         "contrib/pypi/LICENSE",
-        "contrib/pypi/noxfile.py",
         "LICENSE.MIT",
         "LICENSE.GPL-2.0-only"
     ]
@@ -85,9 +84,9 @@ if __name__ == "__main__":
     parser.add_argument('-v', '--verbose', action='store_true', help='increase output verbosity.')
     parser.add_argument('-d', '--directory', type=str, help='specify the directory to create the packaging workspace in.')
 
-    args = parser.parse_args();
+    args = parser.parse_args()
 
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
 
-    create_packaging_workspace(args.directory);
+    create_packaging_workspace(args.directory)
