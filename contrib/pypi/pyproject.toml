@@ -82,7 +82,7 @@ zip-safe = false
 include-package-data = true
 
 [tool.setuptools.dynamic]
-version = {attr = "bitbake_setup.__version__"}
+version = {attr = "bitbake_setup.version.REQUIRED_BBVERSION"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
