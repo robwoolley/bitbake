@@ -59,11 +59,12 @@ def create_packaging_workspace(directory):
             shutil.copy2(src_path, dest_path)
             logging.debug(f"Copied module file: {src_path} to {dest_path}")
 
-    # Create bitbake_setup module
+    # Create bitbake_setup module and version.py
     bitbake_setup_dir = Path(workspace_dir / "src" / "bitbake_setup")
     bitbake_setup_dir.mkdir(exist_ok=True)
     Path(bitbake_setup_dir / "__init__.py").touch()
     shutil.copy2(Path(__file__).parents[2] / "bin" / "bitbake-setup", str(bitbake_setup_dir / "__main__.py"))
+    shutil.copy2(Path(__file__).parents[2] / "bin" / "version.py", str(bitbake_setup_dir / "version.py"))
 
     # Create codegen module
     codegen_dir = Path(workspace_dir / "src" / "codegen")
