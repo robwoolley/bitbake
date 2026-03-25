@@ -21,6 +21,7 @@ import sys
 import textwrap
 import time
 
+from version import REQUIRED_BBVERSION as __version__
 
 bindir = os.path.abspath(os.path.dirname(__file__))
 sys.path[0:0] = [os.path.join(os.path.dirname(bindir), 'lib')]
