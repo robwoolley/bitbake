@@ -72,12 +72,6 @@ def create_packaging_workspace(directory):
     Path(codegen_dir / "__init__.py").touch()
     shutil.copy2(Path(__file__).parents[2] / "lib" / "codegen.py", str(codegen_dir / "__main__.py"))
 
-    # Copy tests
-    tests_dir = Path(workspace_dir / "tests")
-    tests_dir.mkdir(exist_ok=True)
-    shutil.copytree(Path(__file__).parents[2] / "contrib" / "pypi" / "tests", str(tests_dir), dirs_exist_ok=True)
-
-
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
