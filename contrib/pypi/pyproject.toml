@@ -1,7 +1,6 @@
 [build-system]
 requires = [
     "setuptools>=64",
-    "setuptools_scm[toml]>=8",
 ]
 build-backend = "setuptools.build_meta"
 
@@ -21,7 +20,7 @@ classifiers = [
 ]
 
 dependencies = [
-  # BitBake is mostly self-contained
+  # bitbake-setup is mostly self-contained
 ]
 
 [project.optional-dependencies]
@@ -82,6 +81,9 @@ package-dir = { "" = "src" }
 zip-safe = false
 include-package-data = true
 
+[tool.setuptools.dynamic]
+version = {attr = "bitbake_setup.__version__"}
+
 [tool.setuptools.packages.find]
 where = ["src"]
 include = [
@@ -91,11 +93,3 @@ include = [
   "codegen",
   "ply"
 ]
-
-[tool.setuptools_scm]
-# tag_regex = "^(?P<prefix>bitbake-setup[-_])(?P<version>[vV]?\\d+(?:\\.\\d+){0,2}[^\\+]*)(?:\\+. *)?$"
-#tag_regex = "^(?P<prefix>bitbake-setup[-_])(?P<version>[vV]?\\d+(?:\\.\\d+){0,2})$"
-#version_scheme = "no-guess-dev"
-local_scheme = "no-local-version"
-root = "../.."
-fallback_version = "0.0.0"
