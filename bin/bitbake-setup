@@ -21,11 +21,13 @@ import sys
 import textwrap
 import time
 
-import bb.msg
-import bb.process
 
 bindir = os.path.abspath(os.path.dirname(__file__))
 sys.path[0:0] = [os.path.join(os.path.dirname(bindir), 'lib')]
+
+import bb.msg  # noqa: E402
+import bb.process  # noqa: E402
+
 logger = bb.msg.logger_create('bitbake-setup', sys.stdout)
 
 # These settings can only be set in the global context
