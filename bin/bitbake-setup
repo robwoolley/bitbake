@@ -22,10 +22,32 @@ import functools
 import string
 
 bindir = os.path.abspath(os.path.dirname(__file__))
-sys.path[0:0] = [os.path.join(os.path.dirname(bindir), 'lib')]
+libdir = os.path.join(os.path.dirname(bindir), 'lib')
+bbfile = os.path.join(libdir, 'bb', '__init__.py')
 
-import bb.msg
-import bb.process
+# Obtain __version__ and import bb
+if os.path.exists(bbfile):
+    # Execute bitbake-setup in git repository
+    try:
+        sys.path[0:0] = [libdir]
+        import bb.msg
+        import bb.process
+        from bb import __version__
+    except ImportError as e:
+        print(f"Could not import bb from lib: {e}")
+else:
+    # Execute bitbake-setup installed with packages
+    try:
+        from importlib.metadata import version, PackageNotFoundError
+
+        try:
+            __version__ = version("bitbake_setup")
+
+            from bitbake_setup import bb
+        except PackageNotFoundError as e:
+            print(f"Could not find package bb: {e}")
+    except ImportError as e:
+        print(f"Could not import bb from package: {e}")
 
 logger = bb.msg.logger_create('bitbake-setup', sys.stdout)
 
