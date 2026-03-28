@@ -15,23 +15,27 @@ import sys
 import warnings
 warnings.simplefilter("default")
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)),
-                                'lib'))
-try:
-    import bb
-except RuntimeError as exc:
-    sys.exit(str(exc))
+bindir = os.path.abspath(os.path.dirname(__file__))
+libdir = os.path.join(os.path.dirname(bindir), 'lib')
+bbfile = os.path.join(libdir, 'bb', '__init__.py')
+
+if os.path.exists(bbfile):
+    # Execute bitbake in git repository
+    try:
+        sys.path[0:0] = [libdir]
+        import bb
+    except ImportError as e:
+        print(f"Could not import bb from lib: {e}", file=sys.stderr)
+else:
+    print(f"Could not find bb module", file=sys.stderr)
+    sys.exit(1)
 
 from bb import cookerdata
 from bb.main import bitbake_main, BitBakeConfigParameters, BBMainException
 
 bb.utils.check_system_locale()
 
-__version__ = "2.19.0"
-
 if __name__ == "__main__":
-    if __version__ != bb.__version__:
-        sys.exit("Bitbake core version and program version mismatch!")
     try:
         sys.exit(bitbake_main(BitBakeConfigParameters(sys.argv),
                               cookerdata.CookerConfiguration()))
